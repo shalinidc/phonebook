@@ -34,13 +34,19 @@ function App() {
 
 
   const newPersons = (event) => {
-      event.preventDefault()
+      event.preventDefault();
       if(contacts.some(contact => contact.name === newName)){
           alert(`${newName}is already saved in your phonebook`);
           return;
       }
+      const personObj = {
+          name: newName,
+          number: newNumber
+      }
       console.log('setting new name');
-      setPersons(contacts.concat({name:newName, number: newNumber}));
+      Axios
+          .post('http://localhost:3001/persons', personObj)
+          .then(response => setPersons(contacts.concat(response.data)));
       setNewName('');
       setNumber('');
   }

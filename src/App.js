@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import Axios from "axios";
+import contactService from './service/contact';
 
 function App() {
 
@@ -8,13 +8,12 @@ function App() {
   const [newNumber, setNumber] = useState('');
   const [searchKey, setSearchKey] = useState();
 
-  const hook = () => {
-      Axios
-          .get('http://localhost:3001/persons')
-          .then(response => setPersons(response.data));
-  }
 
-  useEffect(hook, []);
+  useEffect(() => {
+      contactService
+          .getAll()
+          .then(contactList => setPersons(contactList))
+  }, []);
 
   const newPerson = (event) => {
       console.log(event.target.value);
@@ -44,9 +43,9 @@ function App() {
           number: newNumber
       }
       console.log('setting new name');
-      Axios
-          .post('http://localhost:3001/persons', personObj)
-          .then(response => setPersons(contacts.concat(response.data)));
+      contactService
+          .update(personObj)
+          .then(newContact => setPersons(contacts.concat(newContact)));
       setNewName('');
       setNumber('');
   }

@@ -50,6 +50,16 @@ function App() {
       setNumber('');
   }
 
+  const deleteContact = (id, name) => {
+      console.log(id,name);
+      const result = window.confirm(`Delete ${name} ?`);
+      if(result){
+          contactService
+              .remove(id);
+      }
+      setPersons(contacts.filter(data => data.id !== id));
+  }
+
   return (
       <div>
           <h2>Phone Book</h2>
@@ -70,7 +80,10 @@ function App() {
           <div>
               <ul>
                   {contactDisplay.map(contact =>
+                      <div>
                       <li key={contact.name}>{contact.name} : {contact.number}</li>
+                      <button onClick={()=>deleteContact(contact.id, contact.name)}> Delete contact </button>
+                      </div>
                   )}
           </ul>
           </div>

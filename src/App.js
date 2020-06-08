@@ -34,15 +34,24 @@ function App() {
 
   const newPersons = (event) => {
       event.preventDefault();
-      if(contacts.some(contact => contact.name === newName)){
-          alert(`${newName}is already saved in your phonebook`);
-          return;
+      let replace = false;
+      let match = {};
+      if(contacts.some(contact => contact.name.toLowerCase() === newName.toLowerCase())){
+           replace = window.confirm(`${newName} is already added to phone book, replace the old number with a new one?`);
+           match = contacts.find(contact => contact.name.toLowerCase() === newName.toLowerCase())
       }
       const personObj = {
           name: newName,
           number: newNumber
       }
-      console.log('setting new name');
+      if(replace){
+          contactService
+              .replace(match.id, personObj)
+              .then(returnedData => {
+                  setPersons(contacts.map(map => map.id === match.id ? returnedData : map))
+              });
+      }
+
       contactService
           .update(personObj)
           .then(newContact => setPersons(contacts.concat(newContact)));

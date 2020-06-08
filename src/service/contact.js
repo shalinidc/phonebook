@@ -15,13 +15,18 @@ const update = (newContact) => {
 
 /* delete is a reserved word in JS */
 const remove = (id) => {
-    console.log(id);
    Axios
-       .delete(`http://localhost:3001/persons/${id}`);
+       .delete(`${baseUrl}/${id}`);
+}
+
+const replace = (id, newNumber) => {
+    const request = Axios.put(`${baseUrl}/${id}`,newNumber);
+     return request.then(response => response.data);
 }
 
 export default {
     getAll: getAll,
     update: update,
-    remove: remove
+    remove: remove,
+    replace: replace
 }

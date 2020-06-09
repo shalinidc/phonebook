@@ -11,3 +11,21 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.success-msg {
+  color: green;
+  background: lightgray;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 5px;
+  border-style: solid;
+}
+
+.error-msg {
+  color: red;
+  background: lightgray;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 5px;
+  border-style: solid;
+}

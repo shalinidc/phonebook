@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import contactService from './service/contact';
+import Notification from "./components/notification";
 
 function App() {
 
@@ -7,6 +8,8 @@ function App() {
   const [newName, setNewName] = useState('');
   const [newNumber, setNumber] = useState('');
   const [searchKey, setSearchKey] = useState();
+  const [notification, setNotification] = useState(null);
+  const [notificationType, setNotificationType] = useState('');
 
 
   useEffect(() => {
@@ -49,12 +52,29 @@ function App() {
               .replace(match.id, personObj)
               .then(returnedData => {
                   setPersons(contacts.map(map => map.id === match.id ? returnedData : map))
+              })
+              .catch(error => {
+                setNotificationType('error');
+                setNotification('Contact was already deleted');
+                setTimeout(()=>{
+                    setNotificationType('');
+                    setNotification(null);
+                }, 5000);
               });
       }
 
       contactService
           .update(personObj)
-          .then(newContact => setPersons(contacts.concat(newContact)));
+          .then(newContact => {
+              setPersons(contacts.concat(newContact));
+              setNotification(`Added ${newContact.name}`);
+              setNotificationType('success');
+              setTimeout(()=> {
+                  setNotification(null);
+                  setNotificationType('');
+              }, 5000);
+          })
+
       setNewName('');
       setNumber('');
   }
@@ -72,6 +92,7 @@ function App() {
   return (
       <div>
           <h2>Phone Book</h2>
+          <Notification message={notification} type={notificationType}/>
           <label> Search </label>
           <input onChange={searchList}/>
         <form>
